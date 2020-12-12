@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 if [ $# -ne 1 ]
 then
     echo "give directory path"
@@ -20,30 +19,38 @@ then
  exit 1
 fi
 
-
-varc=$(cat $1/* | wc -m | awk '{print $1}')
-varl=$(cat $1/* | wc -l | awk '{print $1}')
-varavg=$((varc/varl))
-
-
-echo "Total characters: $varc"
-echo "Total lines: $varl"
-echo "Average: $varavg"
-
-
+totalLines=0
+totalCharacters=0
 
 for f in $1/*
 do
-  echo "File: $f"
-  varc=$(wc -m  $f | awk '{print $1}')
-	varl=$(wc -l $f| awk '{print $1}')
-	varavg=$((varc/varl))
- 
- 	echo "Total characters: $varc"
-	echo "Total lines: $varl"
-	echo "Average: $varavg"
+	if [ -f "$f" ]
+		then
+		  echo "File: $f"
+		  varc=$(wc -m  $f | awk '{print $1}')
+			varl=$(wc -l $f| awk '{print $1}')
+			if [ "$varl" -gt 0 ]
+				then
+					varavg=$((varc/varl))
+		 
+		 			echo "Total characters: $varc"
+					echo "Total lines: $varl"
+					echo "Average: $varavg"
+					totalLines=$((totalLines + varl))
+					totalCharacters=$((totalCharacters + varc))
+				else
+					echo "Empty file"
+			fi
+	fi
+	if [ -d "$f" ]
+		then
+		  echo "Found Directory: $f. Skipping..."
+	fi
 done
 
-
-
-
+echo "Total Characters: $totalCharacters"
+echo "Total Lines: $totalLines"
+if [ "$totalLines" -gt 0 ]
+	then
+		echo "Total Average: $((totalCharacters/totalLines))"
+	fi
