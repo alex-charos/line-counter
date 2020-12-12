@@ -21,8 +21,8 @@ then
 fi
 
 
-varc=$(wc -m $1/* | awk '{print $1}')
-varl=$(wc -l $1/* | awk '{print $1}')
+varc=$(cat $1/* | wc -m | awk '{print $1}')
+varl=$(cat $1/* | wc -l | awk '{print $1}')
 varavg=$((varc/varl))
 
 
@@ -35,12 +35,15 @@ echo "Average: $varavg"
 for f in $1/*
 do
   echo "File: $f"
-  varc=$(wc -m $1/* | awk '{print $1}')
-	varl=$(wc -l $1/* | awk '{print $1}')
+  varc=$(wc -m  $f | awk '{print $1}')
+	varl=$(wc -l $f| awk '{print $1}')
 	varavg=$((varc/varl))
  
  	echo "Total characters: $varc"
 	echo "Total lines: $varl"
 	echo "Average: $varavg"
-
 done
+
+
+
+
